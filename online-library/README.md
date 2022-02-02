@@ -1,21 +1,13 @@
 <!--
-title: 'AWS REST API Template (NodeJS & Typescript)'
-description: 'This template sets up an AWS Lambda with Typescript for a REST API using NestJS and express'
+title: 'AWS REST API DynamoDB example (NodeJS & Typescript)'
+description: 'This example demonstrates an AWS Lambda with Typescript for a REST API using NestJS annd DynamoDB '
 platform: AWS
 language: TypeScript
-authorLink: 'https://github.com/cyberworkz/serverless-templates'
+authorLink: 'https://github.com/cyberworkz/examples/tree/master/online-library'
 authorName: 'Haiko van der Schaaf'
 -->
-# Serverless NestJS REST API template
-
-This serverless template enables you to run a NestJS REST API with AWS Lambda using Serverless and TypeScript.
+# Serverless NestJS REST API + DynamoDB example
+This example demonstrates you how to run a NestJS REST API with AWS Lambda using Serverless and TypeScript with DynamoDB as datastore.
 
 ## Use Cases
-- REST API.
-
-## Setup
-1. Install serverless - ```npm install -g serverless```
-2. Use serverless to create a project with template-url. For example
-   ```serverless create --template-url https://github.com/cyberworkz/serverless-templates/tree/main/aws-nodejs-typescript-restapi-nest --path myService```
-
-
+- REST API + DynamDB
