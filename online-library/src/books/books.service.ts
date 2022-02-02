@@ -10,7 +10,7 @@ export class BooksService {
         return this.bookRepo.getBook(isbn);
     }
 
-    async getAuthorBooks(lastName: string, firstName: string) {
-        await this.bookRepo.getBooks(lastName, firstName);
+    getAuthorBooks(lastName: string, firstName: string) {
+        return this.bookRepo.getBooks(lastName, firstName);
     }
 }

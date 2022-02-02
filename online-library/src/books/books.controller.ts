@@ -13,8 +13,9 @@ export class BooksController {
         return book;
     }
 
-    @Get("/")
-    async getBooksByAuthor(lastName: string, firstName: string) {
+    @Get("/author?")
+    async getBooksByAuthor(lastName: string, firstName: string, @Res() res: any) {
         const books: IBook[] = await this.bookService.getAuthorBooks(lastName, firstName);
+        return books;
     }
 }
