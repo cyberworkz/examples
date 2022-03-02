@@ -1,4 +1,4 @@
-import {Controller, Get, Param, Res} from '@nestjs/common';
+import {Controller, Get, Param, Query, Res} from '@nestjs/common';
 import {BooksService} from "./books.service";
 import {IBook} from "./ibook";
 
@@ -13,8 +13,8 @@ export class BooksController {
         return book;
     }
 
-    @Get("/author?")
-    async getBooksByAuthor(lastName: string, firstName: string, @Res() res: any) {
+    @Get("/author")
+    async getBooksByAuthor(@Query('lastName')lastName: string, @Query('firstName')firstName: string, @Res() res: any) {
         const books: IBook[] = await this.bookService.getAuthorBooks(lastName, firstName);
         return books;
     }
