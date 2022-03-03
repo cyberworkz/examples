@@ -6,11 +6,12 @@ export class BooksService {
 
     constructor(private bookRepo: BooksRepository) {}
 
-    getBook(isbn: number) {
-        return this.bookRepo.getBook(isbn);
+    async getBook(isbn: number) {
+        console.log(isbn);
+        return await this.bookRepo.getBook(isbn);
     }
 
-    getAuthorBooks(lastName: string, firstName: string) {
-        return this.bookRepo.getBooks(lastName, firstName);
+    async getAuthorBooks(lastName: string, firstName: string) {
+        return await this.bookRepo.getBooksByAuthor(lastName, firstName);
     }
 }
