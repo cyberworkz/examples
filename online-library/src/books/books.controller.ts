@@ -1,4 +1,4 @@
-import {Controller, Get, Param, Query, Res} from '@nestjs/common';
+import {Controller, Get, HttpStatus, Param, Res} from '@nestjs/common';
 import {BooksService} from "./books.service";
 import {IBook} from "./ibook";
 
@@ -10,13 +10,13 @@ export class BooksController {
     @Get("/:isbn")
     async getBookByISBN(@Param('isbn') isbn:number, @Res() res: any){
         const book: object = await this.bookService.getBook(isbn);
-        console.log('got book');
-        return book;
+        return res.status(HttpStatus.OK).json(book);
     }
 
-    @Get("/author")
-    async getBooksByAuthor(@Query('lastName')lastName: string, @Query('firstName')firstName: string, @Res() res: any) {
-        // const books: IBook[] = await this.bookService.getAuthorBooks(lastName, firstName);
-        // return books;
+    @Get("/author/:lastName/:firstName")
+    async getBooksByAuthor(@Param('lastName')lastName: string, @Param('firstName')firstName: string, @Res() res: any) {
+        console.log('get author books: ' + firstName + " " + lastName);
+        const books: IBook[] = await this.bookService.getAuthorBooks(lastName, firstName);
+        return res.status(HttpStatus.OK).json(books);
     }
 }

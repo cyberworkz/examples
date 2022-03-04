@@ -44,7 +44,7 @@ export class BooksRepository {
         return book;
     }
 
-    getBooksByAuthor(lastName: string, firstName: string) {
-
+    async getBooksByAuthor(lastName: string, firstName: string) {
+        return [];
     }
 }
