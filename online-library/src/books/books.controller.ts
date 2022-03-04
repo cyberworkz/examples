@@ -15,8 +15,7 @@ export class BooksController {
 
     @Get("/author/:lastName/:firstName")
     async getBooksByAuthor(@Param('lastName')lastName: string, @Param('firstName')firstName: string, @Res() res: any) {
-        console.log('get author books: ' + firstName + " " + lastName);
-        const books: IBook[] = await this.bookService.getAuthorBooks(lastName, firstName);
+        const books: any[] = await this.bookService.getAuthorBooks(lastName, firstName);
         return res.status(HttpStatus.OK).json(books);
     }
 }

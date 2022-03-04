@@ -45,6 +45,30 @@ export class BooksRepository {
     }
 
     async getBooksByAuthor(lastName: string, firstName: string) {
-        return [];
+        let books = [];
+
+        try {
+            const result = await this.db
+                .query({
+                    TableName: this.tableName,
+                    KeyConditionExpression: '#PK=:PK AND begins_with(#SK, :SK)',
+                    ExpressionAttributeNames: {
+                        '#PK': 'PK',
+                        '#SK': 'SK'
+                    },
+                    ExpressionAttributeValues: {
+                        ':PK': this.authorPrefix.concat(lastName.toUpperCase()).concat("_").concat(firstName.toUpperCase()),
+                        ':SK': this.bookPrefix
+                    },
+                    ScanIndexForward: false,
+                    Limit: 100
+                })
+                .promise();
+            books = result.Items;
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+
+        return books;
     }
 }
