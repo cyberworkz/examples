@@ -31,7 +31,6 @@ export class BooksRepository {
                 .promise();
 
             book = result.Item;
-            console.log(book);
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
