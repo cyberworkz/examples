@@ -7,7 +7,6 @@ export class BooksService {
     constructor(private bookRepo: BooksRepository) {}
 
     async getBook(isbn: number) {
-        console.log(isbn);
         return await this.bookRepo.getBook(isbn);
     }
 

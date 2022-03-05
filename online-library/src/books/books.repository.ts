@@ -19,7 +19,6 @@ export class BooksRepository {
 
 
     async getBook(isbn: number) {
-        console.log('in repo');
         let book: object;
        
         try {
