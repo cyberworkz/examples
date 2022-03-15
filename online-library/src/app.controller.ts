@@ -7,6 +7,6 @@ export class AppController {
 
   @Get('ping')
   getPing(): string {
-    return this.appService.getHello();
+    return this.appService.getPing();
   }
 }
