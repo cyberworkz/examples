@@ -12,6 +12,9 @@ provider:
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
+  iamRoleStatements:
+    ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
+
 
 
 package:
@@ -39,5 +42,3 @@ custom:
     - test
     - acc
     - prod
-
-
