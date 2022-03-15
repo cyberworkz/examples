@@ -8,4 +8,4 @@ OnlineLibraryService:
       - dynamodb:Query
       - dynamodb:ConditionCheckItem
     Resource:
-      - ${DynamoDB.arn}
+      - ${dynamoDB.arn}
