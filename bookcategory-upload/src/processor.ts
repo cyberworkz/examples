@@ -19,7 +19,7 @@ const processor: S3Handler = async (event: S3Event) => {
 
     await s3.getObject({ Bucket: record.s3.bucket.name, Key: record.s3.object.key }).promise().then((data) => {
       console.log(data.Body.toString());
-    },
+      },
     );
 
     const stream = await s3.getObject({

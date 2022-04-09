@@ -6,30 +6,39 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
+  environment:
+    DB_NAME: ${self:custom.DB_NAME.dev}
   memorySize: 128 # optional, in MB, default is 1024
   timeout: 10 # optional, in seconds, default is 6
   stage: ${opt:stage, 'dev'}
-  region: [aws-region]
+  region: eu-west-1
   iamRoleStatements:
     - Effect: Allow
       Action:
         - s3:*
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource:
+        - arn:aws:dynamodb:eu-west-1:<accountId>:table/online-library
+
 
 functions:
-  receiver:
+  bookCategoryS3EventProcessor:
+    name: bookCategoryImporter
     handler: handler.processor
     events:
       - s3:
           bucket: ${self:custom.bucket}
           event: s3:ObjectCreated:*
           rules:
-            - suffix: .png
+            - suffix: .csv
 
 custom:
-  bucket: <your-bucket-name>
+  bucket: bookcategories
   stages:
     - dev
-    - test
-    - acc
-    - prod
+  DB_NAME:
+    dev: online-library
+
