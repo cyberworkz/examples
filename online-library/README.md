@@ -11,6 +11,3 @@ This example demonstrates you how to run a NestJS REST API with AWS Lambda using
 
 ## Use Cases
 - REST API + DynamDB
-
-## Examples
-See the following article for a step-to-step guide how to use this template https://medium.com/dev-genius/how-to-build-a-serverless-rest-api-with-nestjs-and-dynamodb-7b58b5b59bf6
