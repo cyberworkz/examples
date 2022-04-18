@@ -14,5 +14,5 @@ This serverless example demonstrates how to handle S3 events with AWS Lambda usi
 - import CSV files into DynamoDB
 
 ## Article
-See https://blog.devgenius.io/s3-trigger-serverless-csv-upload-into-dynamodb-8877c770fb32 for the storry belonging to the code.
+See https://blog.devgenius.io/s3-trigger-serverless-csv-upload-into-dynamodb-8877c770fb32 for the story belonging to the code.
 
