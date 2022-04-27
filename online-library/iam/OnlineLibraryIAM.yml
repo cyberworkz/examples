@@ -8,4 +8,4 @@ OnlineLibraryService:
       - dynamodb:Query
       - dynamodb:ConditionCheckItem
     Resource:
-      - ${dynamoDB.arn}
+      - arn:aws:dynamodb:eu-west-1:184690513648:table/online-library
