@@ -9,22 +9,21 @@ provider:
   memorySize: 128 # optional, in MB, default is 1024
   timeout: 10 # optional, in seconds, default is 6
   stage: ${opt:stage, 'dev'}
-  region: [aws-region]
+  region: eu-west-1
 
 
 functions:
   processor:
     handler: handler.processor
     events:
-      - cloudwatchLog: ${self:custom.logGroup}
+      - cloudwatchLog: 
+          logGroup: ${self:custom.logGroup}
+          filter: '?ERROR ?Exception'
+
 
 # custom variables
 custom:
-  logGroup: <logGroup-arn> # set your logGroup arn here
-  stages:
-    - dev
-    - test
-    - acc
-    - prod
+  logGroup: /aws/lambda/online-library-dev-main
+  
 
 
