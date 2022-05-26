@@ -1,0 +1,28 @@
+service: online-library-stream
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128 # optional, in MB, default is 1024
+  timeout: 10 # optional, in seconds, default is 6
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-1
+
+functions:
+  bookExporter:
+    handler: handler.processor
+    events:
+      - stream:
+          type: dynamodb
+          arn: ${self:custom.stream_arn}
+
+custom:
+  stream_arn: [arn-db-stream]
+  stages:
+    - dev
+    - test
+    - acc
+    - prod
