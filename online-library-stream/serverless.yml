@@ -9,10 +9,10 @@ provider:
   memorySize: 128 # optional, in MB, default is 1024
   timeout: 10 # optional, in seconds, default is 6
   stage: ${opt:stage, 'dev'}
-  region: [aws-region]
+  region: eu-west-1
 
 functions:
-  receiver:
+  bookExporter:
     handler: handler.processor
     events:
       - stream:
@@ -20,7 +20,7 @@ functions:
           arn: ${self:custom.stream_arn}
 
 custom:
-  stream_arn: <your-dynamodb-stream-arn>
+  stream_arn: [arn-db-stream]
   stages:
     - dev
     - test

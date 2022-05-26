@@ -11,6 +11,7 @@
   "dependencies": {
     "@slack/web-api": "^6.7.1",
     "@types/lambda-log": "^2.2.0",
+    "algoliasearch": "^4.13.1",
     "aws-lambda": "^0.1.2",
     "aws-sdk": "^2.859.0",
     "lambda": "^0.10.3",
