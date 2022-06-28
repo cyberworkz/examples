@@ -1,0 +1,48 @@
+service: online-library-stream-filter
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128 # optional, in MB, default is 1024
+  timeout: 10 # optional, in seconds, default is 6
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-1
+
+functions:
+  bookExporter:
+    handler: handlerBooks.processorBooks
+    events:
+      - stream:
+          type: dynamodb
+          arn: ${self:custom.stream_arn}
+          maximumRetryAttempts: 1
+          filterPatterns:
+            - eventName: [INSERT, MODIFY]
+              dynamodb:
+                NewImage:
+                  TYPE:
+                    S: [BOOK]
+  authorExporter:
+    handler: handlerAuthors.processorAuthors
+    events:
+      - stream:
+          type: dynamodb
+          arn: ${self:custom.stream_arn}
+          maximumRetryAttempts: 1
+          filterPatterns:
+            - eventName: [INSERT, MODIFY]
+              dynamodb:
+                NewImage:
+                  TYPE:
+                    S: [AUTHOR]
+              
+custom:
+  stream_arn: [arn-stream]
+  stages:
+    - dev
+    - test
+    - acc
+    - prod
