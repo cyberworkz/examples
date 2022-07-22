@@ -44,7 +44,7 @@ public class OnlineLibraryService {
     }
 
     public List<Book> getBooksFromAuthor(Author author) {
-        LOG.info("getBooksByAuthor");
+        LOG.debug(author.toString());
         return booksByAuthor.get(author) != null ? booksByAuthor.get(author): new ArrayList<>();
     }
 }
