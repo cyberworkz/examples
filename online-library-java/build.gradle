@@ -1,22 +1,37 @@
 plugins {
-    id 'java-library'
+    id 'java'
 }
 
 repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 dependencies {
-    api (
-        'com.amazonaws:aws-lambda-java-core:1.2.1',
-        'com.amazonaws:aws-lambda-java-log4j:1.0.1',
-        'com.fasterxml.jackson.core:jackson-core:2.11.0',
-        'com.fasterxml.jackson.core:jackson-databind:2.11.0',
-        'com.fasterxml.jackson.core:jackson-annotations:2.11.0'
-    )
+
+    // AWS Lambda
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.amazonaws:aws-lambda-java-log4j2:1.5.1'
+    implementation 'com.amazonaws.serverless:aws-serverless-java-container-spring:1.8.2'
+
+
+    // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+
+    // spring
+    implementation 'org.springframework:spring-webmvc:5.3.20'
+    implementation 'org.springframework:spring-context:5.3.20'
+
+    // logging
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
+    implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.2'
+
 }
 
 // Task for building the zip file for upload
@@ -29,7 +44,7 @@ task buildZip(type: Zip) {
     // Link: https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Zip.html
 
     // set the base name of the zip file
-    archiveBaseName = "hello"
+    archiveBaseName = "online-library-java"
     from compileJava
     from processResources
     into('lib') {
