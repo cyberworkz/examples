@@ -24,9 +24,6 @@ Resources:
       Policies: AWSLambdaBasicExecutionRole
       Timeout: 60
       MemorySize: 512
-      Role:
-        Fn::ImportValue:
-          !Join [ '-', [ !Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole' ] ]
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
           PARAM1: VALUE
@@ -38,11 +35,11 @@ Resources:
             Path: /{proxy+}
             Method: any
 
-ConfigLambdaPermission:
-  Type: "AWS::Lambda::Permission"
-  DependsOn:
-    - OnlineLibraryJavaAPI
-  Properties:
-    Action: lambda:InvokeFunction
-    FunctionName: !Ref OnlineLibraryJavaAPI
-    Principal: apigateway.amazonaws.com
+  ConfigLambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    DependsOn:
+      - OnlineLibraryJavaAPI
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref OnlineLibraryJavaAPI
+      Principal: apigateway.amazonaws.com
