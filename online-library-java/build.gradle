@@ -1,4 +1,5 @@
 plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'java'
 }
 
@@ -31,25 +32,12 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
     implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.2'
+    implementation 'org.apache.logging.log4j:log4j-to-slf4j:2.18.0'
+
 
 }
 
-// Task for building the zip file for upload
-task buildZip(type: Zip) {
-    // Using the Zip API from gradle to build a zip file of all the dependencies
-    //
-    // The path to this zip file can be set in the serverless.yml file for the
-    // package/artifact setting for deployment to the S3 bucket
-    //
-    // Link: https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Zip.html
-
-    // set the base name of the zip file
-    archiveBaseName = "online-library-java"
-    from compileJava
-    from processResources
-    into('lib') {
-        from configurations.runtimeClasspath
-    }
+shadowJar {
+    exclude 'META-INF/**'
 }
 
-build.dependsOn buildZip
