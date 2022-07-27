@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  online-library-java
+
+  SAM Template for online-library-java
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 20
+    Tracing: Active
+  Api:
+    TracingEnabled: True
+
+Resources:
+  OnlineLibraryJavaAPI:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./build/libs/online-library-java-all.jar
+      Handler: com.serverlesscorner.onlinelibrary.StreamLambdaHandler
+      Runtime: java11
+      Architectures:
+        - x86_64
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 60
+      MemorySize: 512
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          PARAM1: VALUE
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
+      Events:
+        GetResource:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+
+  ConfigLambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    DependsOn:
+      - OnlineLibraryJavaAPI
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref OnlineLibraryJavaAPI
+      Principal: apigateway.amazonaws.com

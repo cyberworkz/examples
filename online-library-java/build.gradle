@@ -1,0 +1,45 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
+
+dependencies {
+
+    // AWS Lambda
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.amazonaws:aws-lambda-java-log4j2:1.5.1'
+    implementation 'com.amazonaws.serverless:aws-serverless-java-container-spring:1.8.2'
+
+
+    // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+
+    // spring
+    implementation 'org.springframework:spring-webmvc:5.3.20'
+    implementation 'org.springframework:spring-context:5.3.20'
+
+    // logging
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
+    implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
+    implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
+
+
+}
+
+shadowJar {
+    exclude 'META-INF/**/pom.xml'
+    exclude 'META-INF/**/pom.properties'
+    exclude 'META-INF/spring*'
+    exclude '**/Log4j2Plugins.dat'
+}
+

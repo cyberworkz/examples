@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration packages="com.amazonaws.services.lambda.runtime.log4j2">
+    <Appenders>
+        <Lambda name="Lambda">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} %X{AWSRequestId} %-5p %c{1}:%L - %m%n</pattern>
+            </PatternLayout>
+        </Lambda>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.serverlesscorner.onlinelibrary" level="debug" additivity="false">
+            <AppenderRef ref="Lambda" />
+        </Logger>
+        <Logger name="com.amazonaws.serverless" level="info" additivity="false">
+            <AppenderRef ref="Lambda" />
+        </Logger>
+        <Logger name="org.springframework" level="warn" additivity="false">
+            <AppenderRef ref="Lambda" />
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="Lambda" />
+        </Root>
+    </Loggers>
+</Configuration>
