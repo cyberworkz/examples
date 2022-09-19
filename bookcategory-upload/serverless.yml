@@ -5,7 +5,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   environment:
     DB_NAME: ${self:custom.DB_NAME.dev}
   memorySize: 128 # optional, in MB, default is 1024
