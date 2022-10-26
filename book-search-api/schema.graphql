@@ -1,0 +1,17 @@
+type Book_with_suggestions {
+	isbn: String!
+	Title: String!
+	Author: String
+	TYPE: String
+	suggestions: [Suggestion]
+}
+
+type Suggestion {
+	isbn: String!
+	title: String
+	author: String
+}
+
+type BookQuery {
+	getBook_with_suggestions(isbn: ID!): Book_with_suggestions
+}

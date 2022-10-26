@@ -1,0 +1,17 @@
+{
+  "name": "booksearch-api",
+  "version": "0.0.0",
+  "description": "Serverless GraphQL AWS Appsync example",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "deploy-dev": "sls deploy --stage dev"
+  },
+  "dependencies": {
+    "serverless-appsync-plugin": "^1.14.0"
+  },
+  "devDependencies": {},
+  "author": "Haiko van der Schaaf (https://github.com/cyberworkz)",
+  "license": "MIT"
+}
