@@ -3,7 +3,6 @@ frameworkVersion: '3'
 
 plugins:
   - serverless-appsync-plugin
-  - serverless-webpack
 
 provider:
   name: aws
@@ -99,14 +98,46 @@ functions:
 custom:
    appSync:
     name: book-search-api
-   schema: schema.grapql
-   authenticationType: API_KEY
-   caching:
-      behavior: FULL_REQUEST_CACHING # or PER_RESOLVER_CACHING. Required
-      ttl: 3600 # The TTL of the cache. Optional. Default: 3600
-   apiKeys:
-      - name: example-key # name of the api key
-        description: 'Example api key'
-        expiresAfter: 30d # api key life time
-   defaultMappingTemplates: # default templates. Useful for Lambda templates that are often repetitive. Will be used if the template is not specified in a resolver
-      response: lambda-proxy.response.template.tpl # or e.g.: false for Direct lambdas
+    schema: schema.grapql
+    authenticationType: API_KEY
+    caching:
+        behavior: FULL_REQUEST_CACHING # or PER_RESOLVER_CACHING. Required
+        ttl: 3600 # The TTL of the cache. Optional. Default: 3600
+    apiKeys:
+        - name: book-search-api-key # name of the api key
+          description: 'Example api key'
+          expiresAfter: 30d # api key life time
+    defaultMappingTemplates: # default templates. Useful for Lambda templates that are often repetitive. Will be used if the template is not specified in a resolver
+        response: lambda-proxy.response.template.tpl # or e.g.: false for Direct lambdas
+    mappingTemplates:
+      - datasource: library-api
+        type: BookQuery
+        request: library-api-request.vtl
+      - datasource: suggestion-api
+        type: BookQuery
+        request: suggestions-api-request.vtl
+    dataSources:
+      - type: AWS_LAMBDA
+        name: library-api
+        description: 'Online library API'
+        config:
+          lambdaFunctionArn: arn:aws:lambda:eu-west-1:184690513648:function:online-library-dev-main
+          iamRoleStatements: # custom IAM Role statements for this DataSource. Ignored if `serviceRoleArn` is present. Auto-generated if both `serviceRoleArn` and `iamRoleStatements` are omitted
+              - Effect: 'Allow'
+                Action:
+                  - 'lambda:invokeFunction'
+                Resource:
+                  - 'arn:aws:lambda:eu-west-1:184690513648:online-library-dev-main'
+                  - 'arn:aws:lambda:eu-west-1:184690513648:online-library-dev-main:*'
+      - type: AWS_LAMBDA
+        name: suggestion-api
+        description: 'Book Suggestion API'
+        config:
+          lambdaFunctionArn: arn:aws:lambda:eu-west-1:184690513648:function:book-suggestion-dev-main
+          iamRoleStatements: # custom IAM Role statements for this DataSource. Ignored if `serviceRoleArn` is present. Auto-generated if both `serviceRoleArn` and `iamRoleStatements` are omitted
+              - Effect: 'Allow'
+                Action:
+                  - 'lambda:invokeFunction'
+                Resource:
+                  - 'arn:aws:lambda:eu-west-1:184690513648:book-suggestion-dev-main'
+                  - 'arn:aws:lambda:eu-west-1:184690513648:book-suggestion-dev-main:*'
