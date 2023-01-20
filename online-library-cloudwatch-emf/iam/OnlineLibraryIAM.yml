@@ -1,0 +1,11 @@
+OnlineLibraryService:
+  - Effect: Allow
+    Action:
+      - dynamodb:PutItem
+      - dynamodb:Scan
+      - dynamodb:GetItem
+      - dynamodb:UpdateItem
+      - dynamodb:Query
+      - dynamodb:ConditionCheckItem
+    Resource:
+      - arn:aws:dynamodb:eu-west-1:184690513648:table/online-library
