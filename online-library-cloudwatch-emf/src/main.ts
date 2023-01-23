@@ -36,8 +36,7 @@ async function bootstrapServer(): Promise<Server> {
       nestApp.use(eventContext());
       await nestApp.init();
       cachedServer = createServer(expressApp, undefined, binaryMimeTypes);
-    }
-    catch (error) {
+    } catch (error) {
       return Promise.reject(error);
     }
   }
