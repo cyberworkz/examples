@@ -81,7 +81,7 @@ export class BooksRepository {
                         PK: this.bookPrefix.concat(String(isbn)),
                         SK: this.bookPrefix.concat(String(isbn)),
                     },
-                    UpdateExpression: 'set lend = :lendNew, ' +
+                    UpdateExpression: 'set #lend = :lendNew, ' +
                         'lendDate = :lendDate',
                     ConditionExpression: '#lend = :lendOpen',
                     ExpressionAttributeNames: {
@@ -90,7 +90,7 @@ export class BooksRepository {
                     ExpressionAttributeValues: {
                         ':lendNew': true,
                         ':lendDate': new Date().toISOString(),
-                        ':lendOpen': 'lend',
+                        ':lendOpen': false,
                     },
                     ReturnValues: 'ALL_NEW',
                 })
@@ -107,6 +107,6 @@ export class BooksRepository {
         this.logger.log(result);
 
         // @ts-ignore
-        return {ok: true, data: result}
+        return {ok: true, data: result.Attributes}
     }
 }
