@@ -17,4 +17,10 @@ export class BooksController {
         const books: any[] = await this.bookService.getAuthorBooks(lastName, firstName);
         return res.status(HttpStatus.OK).json(books);
     }
+
+    @Put('/:isbn/lend')
+    async lendBook(@Param('isbn') isbn:number, @Res() res: any) {
+        const book = await this.bookService.lendBook(isbn);
+        return res.status(HttpStatus.OK).json(book);
+    }
 }
