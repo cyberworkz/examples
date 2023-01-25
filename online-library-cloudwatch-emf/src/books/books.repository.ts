@@ -1,9 +1,11 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class BooksRepository {
+
+    private readonly logger = new Logger(BooksRepository.name);
 
     private tableName: string;
     private db: DocumentClient;
@@ -66,5 +68,45 @@ export class BooksRepository {
         }
 
         return books;
+    }
+
+    async lendBook(isbn: number) {
+        let result: {};
+        try {
+            this.logger.log('lending book: ' + isbn);
+            result = await this.db
+                .update({
+                    TableName: this.tableName,
+                    Key: {
+                        PK: this.bookPrefix.concat(String(isbn)),
+                        SK: this.bookPrefix.concat(String(isbn)),
+                    },
+                    UpdateExpression: 'set lend = :lendNew, ' +
+                        'lendDate = :lendDate',
+                    ConditionExpression: '#lend = :lendOpen',
+                    ExpressionAttributeNames: {
+                        '#lend': 'lend',
+                    },
+                    ExpressionAttributeValues: {
+                        ':lendNew': true,
+                        ':lendDate': new Date().toISOString(),
+                        ':lendOpen': 'lend',
+                    },
+                    ReturnValues: 'ALL_NEW',
+                })
+                .promise();
+        } catch (error) {
+            this.logger.log(error);
+            if (error.code === 'ConditionalCheckFailedException') {
+                this.logger.warn('book already lend out: ' + isbn, error);
+                return {ok: false, data: 'book already lend out: ' + isbn};
+            }
+            throw new InternalServerErrorException(error);
+        }
+
+        this.logger.log(result);
+
+        // @ts-ignore
+        return {ok: true, data: result}
     }
 }
