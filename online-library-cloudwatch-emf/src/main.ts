@@ -12,7 +12,7 @@ import * as express from 'express';
 // bootstrap Metrics outside Lambda handler
 import { Metrics } from '@aws-lambda-powertools/metrics';
 
-const metrics = new Metrics({ namespace: 'serverlessAirline', serviceName: 'orders' });
+export const metrics = new Metrics({ namespace: 'library-metrics', serviceName: 'bookloans' });
 
 // NOTE: If you get ERR_CONTENT_DECODING_FAILED in your browser, this is likely
 // due to a compressed response (e.g. gzip) which has not been handled correctly
@@ -50,5 +50,9 @@ async function bootstrapServer(): Promise<Server> {
 
 export const handler: Handler = async (event: any, context: Context) => {
   cachedServer = await bootstrapServer();
-  return proxy(cachedServer, event, context, 'PROMISE').promise;
+  let result =  proxy(cachedServer, event, context, 'PROMISE').promise;
+
+  metrics.publishStoredMetrics();
+
+  return result;
 }

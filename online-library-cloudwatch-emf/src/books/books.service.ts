@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import {BooksRepository} from "./books.repository";
+import { metrics } from '../main';
+import { BooksRepository } from "./books.repository";
+
+import { MetricUnits} from '@aws-lambda-powertools/metrics';
+
 
 @Injectable()
 export class BooksService {
-    
 
-    constructor(private bookRepo: BooksRepository) {}
+
+    constructor(private bookRepo: BooksRepository) { }
 
     async getBook(isbn: number) {
         return await this.bookRepo.getBook(isbn);
@@ -16,10 +20,22 @@ export class BooksService {
     }
 
     async lendBook(isbn: number) {
-       return await this.bookRepo.lendBook(isbn);
+        let bookResponse = await this.bookRepo.lendBook(isbn);
+
+        // measure books lend per category
+        metrics.addMetric(bookResponse.data.category, MetricUnits.Count, 1);
+        metrics.addMetadata('lendDate', bookResponse.data.lendDate)
+
+        return bookResponse;
     }
 
     async returnBook(isbn: number) {
-        return await this.bookRepo.returnBook(isbn);
+        let bookResponse = await this.bookRepo.returnBook(isbn);
+
+         // measure books lend per category
+         metrics.addMetric(bookResponse.data.category, MetricUnits.Count, 1);
+         metrics.addMetadata('lendDate', bookResponse.data.lendDate)
+
+         return bookResponse;
     }
 }

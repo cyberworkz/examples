@@ -11,5 +11,6 @@ export interface IBook {
     publisher: string;
     lend: boolean;
     lendDate: Date;
+    returnDate: Date;
 
 }

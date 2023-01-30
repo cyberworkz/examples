@@ -12,14 +12,9 @@ provider:
   runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
-  iamRoleStatements:
-    ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
-
-layers:
-  powertools:
-    path: arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:7
-    name: ${sls:stage}-powertools
-    description: AWS Powertools for metrics, logging and tracing
+  iam:
+    role:
+      statements: ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
 
 package:
   exclude:
@@ -34,6 +29,8 @@ package:
 functions:
   main:
     handler: src/main.handler
+    layers:
+      - arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:7
     events:
       - http:
           method: any
