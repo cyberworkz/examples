@@ -23,4 +23,10 @@ export class BooksController {
         const book = await this.bookService.lendBook(isbn);
         return res.status(HttpStatus.OK).json(book);
     }
+
+    @Put('/:isbn/return')
+    async returnBook(@Param('isbn') isbn:number, @Res() res: any) {
+        const book = await this.bookService.returnBook(isbn);
+        return res.status(HttpStatus.OK).json(book);
+    }
 }

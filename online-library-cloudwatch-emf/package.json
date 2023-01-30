@@ -16,6 +16,7 @@
     "deploy": "sls deploy --stage dev"
   },
   "dependencies": {
+    "@aws-lambda-powertools/metrics": "^1.5.1",
     "@nestjs/common": "^8.2.1",
     "@nestjs/core": "^8.2.1",
     "@nestjs/platform-express": "^8.2.1",

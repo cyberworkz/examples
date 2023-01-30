@@ -3,6 +3,7 @@ import {BooksRepository} from "./books.repository";
 
 @Injectable()
 export class BooksService {
+    
 
     constructor(private bookRepo: BooksRepository) {}
 
@@ -16,5 +17,9 @@ export class BooksService {
 
     async lendBook(isbn: number) {
        return await this.bookRepo.lendBook(isbn);
+    }
+
+    async returnBook(isbn: number) {
+        return await this.bookRepo.returnBook(isbn);
     }
 }

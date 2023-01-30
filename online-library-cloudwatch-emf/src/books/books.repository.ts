@@ -109,4 +109,44 @@ export class BooksRepository {
         // @ts-ignore
         return {ok: true, data: result.Attributes}
     }
+
+    async returnBook(isbn: number) {
+        let result: {};
+        try {
+            this.logger.log('returning book: ' + isbn);
+            result = await this.db
+                .update({
+                    TableName: this.tableName,
+                    Key: {
+                        PK: this.bookPrefix.concat(String(isbn)),
+                        SK: this.bookPrefix.concat(String(isbn)),
+                    },
+                    UpdateExpression: 'set #lend = :lendNew, ' +
+                        'returnDate = :returnDate',
+                    ConditionExpression: '#lend = :lendOpen',
+                    ExpressionAttributeNames: {
+                        '#lend': 'lend',
+                    },
+                    ExpressionAttributeValues: {
+                        ':lendNew': false,
+                        ':returnDate': new Date().toISOString(),
+                        ':lendOpen': true,
+                    },
+                    ReturnValues: 'ALL_NEW',
+                })
+                .promise();
+        } catch (error) {
+            this.logger.log(error);
+            if (error.code === 'ConditionalCheckFailedException') {
+                this.logger.warn('book not lend out: ' + isbn, error);
+                return {ok: false, data: 'book not lend out: ' + isbn};
+            }
+            throw new InternalServerErrorException(error);
+        }
+
+        this.logger.log(result);
+
+        // @ts-ignore
+        return {ok: true, data: result.Attributes}
+    }
 }

@@ -9,6 +9,11 @@ import { AppModule } from './app.module';
 
 import * as express from 'express';
 
+// bootstrap Metrics outside Lambda handler
+import { Metrics } from '@aws-lambda-powertools/metrics';
+
+const metrics = new Metrics({ namespace: 'serverlessAirline', serviceName: 'orders' });
+
 // NOTE: If you get ERR_CONTENT_DECODING_FAILED in your browser, this is likely
 // due to a compressed response (e.g. gzip) which has not been handled correctly
 // by aws-serverless-express and/or API Gateway. Add the necessary MIME types to

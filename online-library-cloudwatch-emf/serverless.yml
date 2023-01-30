@@ -15,7 +15,11 @@ provider:
   iamRoleStatements:
     ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
 
-
+layers:
+  powertools:
+    path: arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:7
+    name: ${sls:stage}-powertools
+    description: AWS Powertools for metrics, logging and tracing
 
 package:
   exclude:
