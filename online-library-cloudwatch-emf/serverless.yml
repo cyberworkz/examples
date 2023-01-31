@@ -12,6 +12,9 @@ provider:
   runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
+  environment:
+    POWERTOOLS_METRICS_NAMESPACE: library-metrics
+    POWERTOOLS_SERVICE_NAME: bookloans
   iam:
     role:
       statements: ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
