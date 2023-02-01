@@ -10,6 +10,8 @@ provider:
   tracing:
     apiGateway: true
   runtime: nodejs14.x
+  memorySize: 128 # optional, in MB, default is 1024
+  timeout: 10 # optional, in seconds, default is 6
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
   environment:
@@ -20,14 +22,14 @@ provider:
       statements: ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
 
 package:
+  excludeDevDependencies: true
+  individually: true
   exclude:
     - .gitignore
     - README.md
     - serverless.yml
     - nest-cli.json
     - .prettierrc
-  excludeDevDependencies: true
-  individually: true
 
 functions:
   main:

@@ -33,7 +33,7 @@ export class BooksService {
     async returnBook(isbn: number) {
         let bookResponse = await this.bookRepo.returnBook(isbn);
 
-         // measure books lend per category
+         // measure books lend per category decrease
          metrics.addMetric(bookResponse.data.category, MetricUnits.Count, 1);
          metrics.addMetadata('lendDate', bookResponse.data.lendDate)
          metrics.publishStoredMetrics();
