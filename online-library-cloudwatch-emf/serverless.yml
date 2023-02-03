@@ -2,7 +2,6 @@ service: online-library-cloudwatch-emf
 
 plugins:
   - serverless-plugin-typescript
-  - serverless-plugin-optimize
   - serverless-offline
   - serverless-stage-manager
 provider:
@@ -22,14 +21,13 @@ provider:
       statements: ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
 
 package:
-  excludeDevDependencies: true
   individually: true
-  exclude:
-    - .gitignore
-    - README.md
-    - serverless.yml
-    - nest-cli.json
-    - .prettierrc
+  excludeDevDependencies: true
+  patterns:
+    - '!README.md'
+    - '!erverless.yml'
+    - '!nest-cli.json'
+    - '!.prettierrc'
 
 functions:
   main:
