@@ -2,7 +2,6 @@ service: online-library
 
 plugins:
   - serverless-plugin-typescript
-  - serverless-plugin-optimize
   - serverless-offline
   - serverless-stage-manager
 provider:
