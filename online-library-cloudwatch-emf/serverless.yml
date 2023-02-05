@@ -21,13 +21,12 @@ provider:
       statements: ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
 
 package:
-  individually: true
-  excludeDevDependencies: true
   patterns:
     - '!README.md'
     - '!erverless.yml'
     - '!nest-cli.json'
     - '!.prettierrc'
+  excludeDevDependencies: true
 
 functions:
   main:
