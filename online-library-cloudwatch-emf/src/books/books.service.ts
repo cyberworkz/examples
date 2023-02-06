@@ -26,6 +26,9 @@ export class BooksService {
             // measure books lend per category
             metrics.addMetric(bookResponse.data.category, MetricUnits.Count, 1);
             metrics.addMetadata('lendDate', bookResponse.data.lendDate)
+
+            // publish metrics
+            metrics.publishStoredMetrics();
         }
 
         return bookResponse;

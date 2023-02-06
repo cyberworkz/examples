@@ -51,9 +51,5 @@ async function bootstrapServer(): Promise<Server> {
 
 export const handler: Handler = async (event: any, context: Context) => {
   cachedServer = await bootstrapServer();
-  let response = proxy(cachedServer, event, context, 'PROMISE').promise;
-  
-  // publish metrics
-  metrics.publishStoredMetrics();
-  return response;
+  return proxy(cachedServer, event, context, 'PROMISE').promise;
 }
