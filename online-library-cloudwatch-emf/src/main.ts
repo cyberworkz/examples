@@ -11,9 +11,7 @@ import * as express from 'express';
 
 // bootstrap Metrics outside Lambda handler
 import { Metrics } from '@aws-lambda-powertools/metrics';
-
-// empty constructor works best.
-export const metrics = new Metrics();
+export const metrics = new Metrics({ namespace: 'library-metrics', serviceName: 'bookloans' });
 
 // NOTE: If you get ERR_CONTENT_DECODING_FAILED in your browser, this is likely
 // due to a compressed response (e.g. gzip) which has not been handled correctly

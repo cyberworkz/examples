@@ -13,9 +13,6 @@ provider:
   timeout: 10 # optional, in seconds, default is 6
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
-  environment:
-    POWERTOOLS_METRICS_NAMESPACE: library-metrics
-    POWERTOOLS_SERVICE_NAME: bookloans
   iam:
     role:
       statements: ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
