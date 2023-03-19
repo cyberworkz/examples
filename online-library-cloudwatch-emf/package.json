@@ -1,7 +1,7 @@
 {
-  "name": "online-library",
+  "name": "online-library-cloudwatch-emf",
   "version": "1.0.0",
-  "description": "Serverless REST API service",
+  "description": "Serverless REST API service with Cloudwatch EMF example",
   "author": "cyberworkz",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
@@ -26,6 +26,7 @@
     "rxjs": "^6.2.2"
   },
   "devDependencies": {
+    "@aws-lambda-powertools/metrics": "^1.5.1",
     "@nestjs/testing": "^5.1.0",
     "@types/aws-lambda": "^8.10.15",
     "@types/aws-serverless-express": "^3.3.5",

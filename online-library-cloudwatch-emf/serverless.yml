@@ -1,4 +1,4 @@
-service: online-library
+service: online-library-cloudwatch-emf
 
 plugins:
   - serverless-plugin-typescript
@@ -9,26 +9,27 @@ provider:
   tracing:
     apiGateway: true
   runtime: nodejs14.x
+  memorySize: 128 # optional, in MB, default is 1024
+  timeout: 10 # optional, in seconds, default is 6
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
-  iamRoleStatements:
-    ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
-
-
+  iam:
+    role:
+      statements: ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
 
 package:
-  exclude:
-    - .gitignore
-    - README.md
-    - serverless.yml
-    - nest-cli.json
-    - .prettierrc
+  patterns:
+    - '!README.md'
+    - '!erverless.yml'
+    - '!nest-cli.json'
+    - '!.prettierrc'
   excludeDevDependencies: true
-  individually: true
 
 functions:
   main:
     handler: src/main.handler
+    layers:
+      - arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:7
     events:
       - http:
           method: any
