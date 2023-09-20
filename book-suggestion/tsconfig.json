@@ -1,17 +1,17 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 18",
+
   "compilerOptions": {
+    "lib": ["es2022", "DOM"],
     "module": "commonjs",
-    "declaration": true,
-    "noImplicitAny": false,
-    "removeComments": true,
-    "noLib": false,
-    "allowSyntheticDefaultImports": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es6",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./"
+    "target": "es2022",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
   },
   "exclude": ["node_modules"]
 }

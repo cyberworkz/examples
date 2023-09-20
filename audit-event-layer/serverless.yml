@@ -1,0 +1,18 @@
+service: audit-event-layer
+
+plugins:
+  - serverless-plugin-typescript
+provider:
+  name: aws
+  region: eu-west-1 # set your region here
+
+layers:
+  audit-events:
+    path: layer
+    description: audit all incoming events of your Lambda service
+    compatibleRuntimes:
+      - nodejs16.x
+      - nodejs18.x
+
+
+
