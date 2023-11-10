@@ -7,7 +7,7 @@ const isBook = (x: DynamoDBValues): x is IBook {
     && candidate.isbn !== undefined && candidate.title !== undefined;
 };
 
-export const  BOOK_ENTITY = createEntity(
+export const BOOK_ENTITY = createEntity(
     'BOOK',
     isBook,
     ({isbn}: Pick<IBook, 'isbn'>) => 'BOOK#${isbn}',
