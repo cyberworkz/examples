@@ -1,41 +1,40 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
-import { AllEntitiesStore, Entity, SingleEntityOperations, createStandardSingleTableConfig, createStore } from "@symphoniacloud/dynamodb-entity-store";
+import {Injectable, InternalServerErrorException, NotFoundException} from '@nestjs/common';
+import {
+    AllEntitiesStore,
+    SingleEntityOperations,
+    createStandardSingleTableConfig,
+    createStore,
+    rangeWhereSkBeginsWith
+} from '@symphoniacloud/dynamodb-entity-store';
 import * as AWS from 'aws-sdk';
-import { BOOK_ENTITY } from "./book.entity";
-import { IBook } from "./ibook";
+import {BOOK_ENTITY} from './book.entity';
+import {Book} from './book';
+import {AuthorBook} from './authorBook';
+import {AUTHOR_BOOK_ENTITY} from './authorBook.entity';
+import {startWith} from 'rxjs';
 
 @Injectable()
 export class BooksRepository {
 
-    private tableName: string;
+    private readonly tableName: string;
     private db: AllEntitiesStore;
-    private bookStore: object
+    private bookStore: SingleEntityOperations<Book, Pick<Book, 'isbn'>, Pick<Book, 'isbn'>>;
+    private authorBookStore: SingleEntityOperations<AuthorBook, Pick<AuthorBook, 'firstName' | 'lastName'>, Pick<AuthorBook, 'isbn'>>;
     private bookPrefix = 'BOOK#';
-    private authorPrefix = 'AUTH#'
-
+    private authorPrefix = 'AUTH#';
 
     constructor() {
         this.tableName = 'online-library';
         this.db = createStore(createStandardSingleTableConfig(this.tableName));
         this.bookStore = this.db.for(BOOK_ENTITY);
+        this.authorBookStore = this.db.for(AUTHOR_BOOK_ENTITY);
     }
 
-
     async getBook(isbn: number) {
-        let book: object;
-       
-        book = await this.bookStore.getOrThrow
-        
-        try {
-            const result = await this.db
-                .get({
-                    TableName: this.tableName,
-                    Key: { PK: this.bookPrefix.concat(String(isbn)),
-                           SK: this.bookPrefix.concat(String(isbn))},
-                })
-                .promise();
+        let book: Book;
 
-            book = result.Item;
+        try {
+            book = await this.bookStore.getOrThrow({isbn});
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
@@ -48,29 +47,11 @@ export class BooksRepository {
     }
 
     async getBooksByAuthor(lastName: string, firstName: string) {
-        let books = [];
+        let books: AuthorBook[] = [];
 
-        try {
-            const result = await this.db
-                .query({
-                    TableName: this.tableName,
-                    KeyConditionExpression: '#PK=:PK AND begins_with(#SK, :SK)',
-                    ExpressionAttributeNames: {
-                        '#PK': 'PK',
-                        '#SK': 'SK'
-                    },
-                    ExpressionAttributeValues: {
-                        ':PK': this.authorPrefix.concat(lastName.toUpperCase()).concat("_").concat(firstName.toUpperCase()),
-                        ':SK': this.bookPrefix
-                    },
-                    ScanIndexForward: false,
-                    Limit: 100
-                })
-                .promise();
-            books = result.Items;
-        } catch (error) {
-            throw new InternalServerErrorException(error);
-        }
+        const authorPK = this.authorPrefix.concat(lastName.toUpperCase()).concat('_').concat(firstName.toUpperCase());
+        books = await this.authorBookStore.queryAllByPkAndSk({firstName, lastName},
+            rangeWhereSkBeginsWith(this.bookPrefix), {scanIndexForward: false});
 
         return books;
     }
