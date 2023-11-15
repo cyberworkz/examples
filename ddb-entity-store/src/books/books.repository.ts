@@ -4,7 +4,7 @@ import {
     SingleEntityOperations,
     createStandardSingleTableConfig,
     createStore,
-    rangeWhereSkBeginsWith
+    rangeWhereSkBeginsWith, consoleLogger, createStoreContext
 } from '@symphoniacloud/dynamodb-entity-store';
 import * as AWS from 'aws-sdk';
 import {BOOK_ENTITY} from './book.entity';
@@ -12,6 +12,7 @@ import {Book} from './book';
 import {AuthorBook} from './authorBook';
 import {AUTHOR_BOOK_ENTITY} from './authorBook.entity';
 import {startWith} from 'rxjs';
+import logger from '@vendia/serverless-express/src/logger';
 
 @Injectable()
 export class BooksRepository {
@@ -25,7 +26,8 @@ export class BooksRepository {
 
     constructor() {
         this.tableName = 'online-library';
-        this.db = createStore(createStandardSingleTableConfig(this.tableName));
+        const storeContext = createStoreContext({ logger: consoleLogger });
+        this.db = createStore(createStandardSingleTableConfig(this.tableName), storeContext);
         this.bookStore = this.db.for(BOOK_ENTITY);
         this.authorBookStore = this.db.for(AUTHOR_BOOK_ENTITY);
     }
