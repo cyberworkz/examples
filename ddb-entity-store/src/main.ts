@@ -1,13 +1,9 @@
 import { Handler, Context } from 'aws-lambda';
-import { Server } from 'http';
 
-import serverlessExpress from '@vendia/serverless-express';
+import {configure as serverlessExpress} from '@vendia/serverless-express';
 
-import { ExpressAdapter } from '@nestjs/platform-express';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-
-import express from 'express';
 
 // NOTE: If you get ERR_CONTENT_DECODING_FAILED in your browser, this is likely
 // due to a compressed response (e.g. gzip) which has not been handled correctly
@@ -29,21 +25,12 @@ process.on('uncaughtException', (reason) => {
 
 async function bootstrapServer() {
   if (!cachedServer) {
-    const expressApp = express();
-    const nestApp = await NestFactory.create(
-        AppModule,
-        new ExpressAdapter(expressApp),
-    );
-
+    const nestApp = await NestFactory.create(AppModule);
+    nestApp.init();
     nestApp.enableCors();
-
-    await nestApp.init();
-
-    cachedServer = serverlessExpress({ app: expressApp });
+    cachedServer = serverlessExpress({ app: nestApp.getHttpAdapter().getInstance()});
   }
-
   return cachedServer;
-
 }
 
 export const handler = async (event: any, context: Context, callback: any) => {
