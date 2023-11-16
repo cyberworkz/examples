@@ -9,6 +9,6 @@ const isBook = (x: DynamoDBValues): x is Book => {
 export const BOOK_ENTITY = createEntity(
     'BOOK',
     isBook,
-    ({isbn}: Pick<Book, 'isbn'>) => `BOOK#${isbn}`,
-    ({isbn}: Pick<Book, 'isbn'>) => `BOOK#${isbn}`,
+    ({isbn}: Pick<Book, 'isbn'>) => 'BOOK#' + isbn,
+    ({isbn}: Pick<Book, 'isbn'>) => 'BOOK#' + isbn,
 );
