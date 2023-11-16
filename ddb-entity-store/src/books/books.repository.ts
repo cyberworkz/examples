@@ -6,13 +6,10 @@ import {
     createStore,
     rangeWhereSkBeginsWith, consoleLogger, createStoreContext
 } from '@symphoniacloud/dynamodb-entity-store';
-import * as AWS from 'aws-sdk';
 import {BOOK_ENTITY} from './book.entity';
 import {Book} from './book';
 import {AuthorBook} from './authorBook';
 import {AUTHOR_BOOK_ENTITY} from './authorBook.entity';
-import {startWith} from 'rxjs';
-import logger from '@vendia/serverless-express/src/logger';
 
 @Injectable()
 export class BooksRepository {
