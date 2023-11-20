@@ -19,7 +19,6 @@ export class BooksRepository {
     private bookStore: SingleEntityOperations<Book, Pick<Book, 'isbn'>, Pick<Book, 'isbn'>>;
     private authorBookStore: SingleEntityOperations<AuthorBook, Pick<AuthorBook, 'firstName' | 'lastName'>, Pick<AuthorBook, 'isbn'>>;
     private bookPrefix = 'BOOK#';
-    private authorPrefix = 'AUTH#';
 
     constructor() {
         this.tableName = 'online-library';
@@ -48,10 +47,11 @@ export class BooksRepository {
     async getBooksByAuthor(lastName: string, firstName: string) {
         let books: AuthorBook[] = [];
 
-        const authorPK = this.authorPrefix.concat(lastName.toUpperCase()).concat('_').concat(firstName.toUpperCase());
         books = await this.authorBookStore.queryAllByPkAndSk({firstName, lastName},
             rangeWhereSkBeginsWith(this.bookPrefix), {scanIndexForward: false});
 
+        // tslint:disable-next-line:no-console
+        console.log(books);
         return books;
     }
 }
