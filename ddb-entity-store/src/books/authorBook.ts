@@ -3,5 +3,4 @@ export interface AuthorBook {
     lastName: string;
     Title: string;
     isbn: number;
-
 }

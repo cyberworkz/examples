@@ -47,11 +47,11 @@ export class BooksRepository {
     async getBooksByAuthor(lastName: string, firstName: string) {
         let books: AuthorBook[] = [];
 
-        books = await this.authorBookStore.queryAllByPkAndSk({firstName, lastName},
+        const resp = await this.authorBookStore.queryAllByPkAndSk({firstName, lastName},
             rangeWhereSkBeginsWith(this.bookPrefix), {scanIndexForward: false});
 
         // tslint:disable-next-line:no-console
-        console.log(books);
+        console.log(resp);
         return books;
     }
 }
