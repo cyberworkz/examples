@@ -5,7 +5,10 @@ import {AuthorBook} from './authorBook';
 
 const isAuthorBook = (x: DynamoDBValues): x is AuthorBook => {
     const candidate = x as AuthorBook;
-    return candidate.Title !== undefined;
+    return candidate.Title !== undefined 
+    && candidate.firstName !== undefined 
+    && candidate.lastName !== undefined 
+    && candidate.isbn !== undefined;
 };
 
 export const AUTHOR_BOOK_ENTITY = createEntity(

@@ -15,24 +15,24 @@ import {AUTHOR_BOOK_ENTITY} from './authorBook.entity';
 export class BooksRepository {
 
     private readonly tableName: string;
-    private db: AllEntitiesStore;
-    private bookStore: SingleEntityOperations<Book, Pick<Book, 'isbn'>, Pick<Book, 'isbn'>>;
-    private authorBookStore: SingleEntityOperations<AuthorBook, Pick<AuthorBook, 'firstName' | 'lastName'>, Pick<AuthorBook, 'isbn'>>;
+    private store: AllEntitiesStore;
+    private bookOps: SingleEntityOperations<Book, Pick<Book, 'isbn'>, Pick<Book, 'isbn'>>;
+    private authorBookOps: SingleEntityOperations<AuthorBook, Pick<AuthorBook, 'firstName' | 'lastName'>, Pick<AuthorBook, 'isbn'>>;
     private bookPrefix = 'BOOK#';
 
     constructor() {
         this.tableName = 'online-library';
         const storeContext = createStoreContext({ logger: consoleLogger });
-        this.db = createStore(createStandardSingleTableConfig(this.tableName), storeContext);
-        this.bookStore = this.db.for(BOOK_ENTITY);
-        this.authorBookStore = this.db.for(AUTHOR_BOOK_ENTITY);
+        this.store = createStore(createStandardSingleTableConfig(this.tableName), storeContext);
+        this.bookOps = this.store.for(BOOK_ENTITY);
+        this.authorBookOps = this.store.for(AUTHOR_BOOK_ENTITY);
     }
 
     async getBook(isbn: number) {
         let book: Book;
 
         try {
-            book = await this.bookStore.getOrThrow({isbn});
+            book = await this.bookOps.getOrThrow({isbn});
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
@@ -47,7 +47,7 @@ export class BooksRepository {
     async getBooksByAuthor(lastName: string, firstName: string) {
         let books: AuthorBook[] = [];
 
-        const resp = await this.authorBookStore.queryAllByPkAndSk({firstName, lastName},
+        const resp = await this.authorBookOps.queryAllByPkAndSk({firstName, lastName},
             rangeWhereSkBeginsWith(this.bookPrefix), {scanIndexForward: false});
 
         // tslint:disable-next-line:no-console
