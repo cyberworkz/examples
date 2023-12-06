@@ -1,5 +1,6 @@
 import {Injectable, InternalServerErrorException, NotFoundException} from '@nestjs/common';
 import {
+    TableConfig,
     AllEntitiesStore,
     SingleEntityOperations,
     createStandardSingleTableConfig,
@@ -13,7 +14,7 @@ import {AUTHOR_BOOK_ENTITY} from './authorBook.entity';
 
 @Injectable()
 export class BooksRepository {
-
+    
     private readonly tableName: string;
     private store: AllEntitiesStore;
     private bookOps: SingleEntityOperations<Book, Pick<Book, 'isbn'>, Pick<Book, 'isbn'>>;
@@ -23,7 +24,11 @@ export class BooksRepository {
     constructor() {
         this.tableName = 'online-library';
         const storeContext = createStoreContext({ logger: consoleLogger });
-        this.store = createStore(createStandardSingleTableConfig(this.tableName), storeContext);
+
+        let tableConfig: TableConfig = createStandardSingleTableConfig(this.tableName);
+        tableConfig.metaAttributeNames.entityType = 'TYPE';
+
+        this.store = createStore(tableConfig, storeContext);
         this.bookOps = this.store.for(BOOK_ENTITY);
         this.authorBookOps = this.store.for(AUTHOR_BOOK_ENTITY);
     }
@@ -53,5 +58,11 @@ export class BooksRepository {
         // tslint:disable-next-line:no-console
         console.log(books);
         return books;
+    }
+
+    async addBook(newBook: Book) {
+       let any =  await this.bookOps.put(newBook);
+       console.log(any);
+       return newBook;
     }
 }
