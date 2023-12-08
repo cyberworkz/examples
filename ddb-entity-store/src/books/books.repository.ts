@@ -14,7 +14,7 @@ import {AUTHOR_BOOK_ENTITY} from './authorBook.entity';
 
 @Injectable()
 export class BooksRepository {
-    
+
     private readonly tableName: string;
     private store: AllEntitiesStore;
     private bookOps: SingleEntityOperations<Book, Pick<Book, 'isbn'>, Pick<Book, 'isbn'>>;
@@ -61,8 +61,7 @@ export class BooksRepository {
     }
 
     async addBook(newBook: Book) {
-       let any =  await this.bookOps.put(newBook);
-       console.log(any);
+       await this.bookOps.put(newBook);
        return newBook;
     }
 }
