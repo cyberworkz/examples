@@ -1,0 +1,43 @@
+service: online-library
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-stage-manager
+provider:
+  name: aws
+  tracing:
+    apiGateway: true
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-1
+  iamRoleStatements:
+    ${file(iam/OnlineLibraryIAM.yml):OnlineLibraryService}
+
+
+
+package:
+  exclude:
+    - .gitignore
+    - README.md
+    - serverless.yml
+    - nest-cli.json
+    - .prettierrc
+  excludeDevDependencies: true
+  individually: true
+
+functions:
+  main:
+    handler: src/main.handler
+    events:
+      - http:
+          method: any
+          path: /{proxy+}
+          cors: true
+
+custom:
+  stages:
+    - dev
+    - test
+    - acc
+    - prod
